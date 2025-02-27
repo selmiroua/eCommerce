@@ -57,6 +57,8 @@ exports.createProduct = async (req, res) => {
   try {
     const { name, description, price, stock, category, image } = req.body;
 
+    console.log('Received Image:', image); // Debugging
+
     // Basic validation
     if (!name?.trim()) {
       return res.status(400).json({ message: 'Le nom du produit est requis' });
@@ -67,11 +69,11 @@ exports.createProduct = async (req, res) => {
     if (!category?.trim()) {
       return res.status(400).json({ message: 'La catégorie est requise' });
     }
-    
+
     // Convert and validate price and stock
     const numericPrice = Number(price);
     const numericStock = Number(stock);
-    
+
     if (isNaN(numericPrice) || numericPrice <= 0) {
       return res.status(400).json({ message: 'Le prix doit être un nombre positif' });
     }
@@ -81,51 +83,38 @@ exports.createProduct = async (req, res) => {
 
     let imagePath = '';
     if (image) {
+      console.log('Image provided');
       try {
         // Extract base64 data
         const matches = image.match(/^data:image\/([A-Za-z-+/]+);base64,(.+)$/);
-        
+
         if (matches && matches.length === 3) {
           const imageBuffer = Buffer.from(matches[2], 'base64');
           const fileExtension = matches[1];
           const fileName = `${Date.now()}.${fileExtension}`;
           const uploadDir = path.join(__dirname, '..', 'uploads');
-          
+
           // Create uploads directory if it doesn't exist
           if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir, { recursive: true });
           }
-          
+
           // Save the image file
           const filePath = path.join(uploadDir, fileName);
           fs.writeFileSync(filePath, imageBuffer);
           imagePath = `/uploads/${fileName}`;
-          
-          console.log('Image saved successfully:', filePath);
+
+          console.log('Image saved successfully:', filePath); // Debugging
         } else {
           console.log('Invalid image data format');
+          return res.status(400).json({ message: 'Format d\'image invalide' });
         }
       } catch (error) {
         console.error('Error saving image:', error);
         return res.status(400).json({ message: 'Erreur lors de l\'enregistrement de l\'image' });
       }
-    } else if (req.file) {
-      try {
-        const uploadDir = path.join(__dirname, '..', 'uploads');
-        
-        // Create uploads directory if it doesn't exist
-        if (!fs.existsSync(uploadDir)) {
-          fs.mkdirSync(uploadDir, { recursive: true });
-        }
-        
-        // Save the image file
-        const filePath = path.join(uploadDir, req.file.filename);
-        imagePath = `/uploads/${req.file.filename}`;
-        
-        console.log('Image saved successfully:', filePath);
-      } catch (error) {
-        console.error('Error saving image:', error);
-      }
+    } else {
+      console.log('No image provided');
     }
 
     const product = new Product({

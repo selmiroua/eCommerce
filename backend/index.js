@@ -4,12 +4,17 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const productRoutes = require('./routes/productRoutes');
 const authRoutes = require('./routes/authRoutes');
+const path = require('path'); // Add this at the top of your file
 
 const app = express();
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+
+// Increase the payload size limit to 50MB (or any size you need)
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ecommerce';
