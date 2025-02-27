@@ -173,16 +173,15 @@ const Products = () => {
       await new Promise(resolve => setTimeout(resolve, 500)); // Simuler un délai
 
       if (selectedProduct) {
-        // Modification d'un produit existant
         const updatedProducts = products.map(p => 
           p._id === selectedProduct._id 
             ? { ...formData, _id: selectedProduct._id, images: imagePreview.length ? imagePreview : selectedProduct.images }
             : p
         );
+
         setProducts(updatedProducts);
         showNotification('Produit modifié avec succès');
       } else {
-        // Ajout d'un nouveau produit
         const newProduct = {
           ...formData,
           _id: String(Date.now()),
@@ -314,62 +313,62 @@ const Products = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-300">
-            {filteredProducts.map((product) => (
-              <tr key={product._id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0 h-20 w-20">
-                      {product.image ? (
-                        <img
-                          className="h-20 w-20 object-cover rounded-md"
-                          src={product.image}
-                          alt={product.name}
-                          onError={(e) => {
-                            console.error('Image load error:', e);
-                            e.target.onerror = null;
-                            e.target.src = 'https://via.placeholder.com/400x400?text=Image+non+disponible';
-                          }}
-                        />
-                      ) : (
-                        <div className="h-20 w-20 flex items-center justify-center bg-gray-100 rounded-md">
-                          <span className="text-gray-400 text-sm">No image</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4">{product.name}</td>
-                <td className="px-6 py-4">${product.price}</td>
-                <td className="px-6 py-4">
-                  <span className={`px-2 py-1 rounded ${product.stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                    {product.stock}
-                  </span>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="space-y-1">
-                    <div>Style: {product.categories?.style?.join(', ') || 'N/A'}</div>
-                    <div>Type: {product.categories?.type?.join(', ') || 'N/A'}</div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-right">
-                  <div className="flex justify-end space-x-2">
-                    <button
-                      onClick={() => handleEdit(product)}
-                      className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-                    >
-                      Modifier
-                    </button>
-                    <button
-                      onClick={() => handleDelete(product._id)}
-                      className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
-                    >
-                      Supprimer
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+  {filteredProducts.map((product) => (
+    <tr key={product._id} className="hover:bg-gray-50">
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="flex items-center">
+          <div className="flex-shrink-0 h-20 w-20">
+            {product.image ? (
+              <img
+                className="h-20 w-20 object-cover rounded-md"
+                src={`http://localhost:5000${product.image}`} // Use absolute URL
+                alt={product.name}
+                onError={(e) => {
+                  console.error('Image load error:', e);
+                  e.target.onerror = null;
+                  e.target.src = 'https://via.placeholder.com/400x400?text=Image+non+disponible';
+                }}
+              />
+            ) : (
+              <div className="h-20 w-20 flex items-center justify-center bg-gray-100 rounded-md">
+                <span className="text-gray-400 text-sm">No image</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </td>
+      <td className="px-6 py-4">{product.name}</td>
+      <td className="px-6 py-4">${product.price}</td>
+      <td className="px-6 py-4">
+        <span className={`px-2 py-1 rounded ${product.stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+          {product.stock}
+        </span>
+      </td>
+      <td className="px-6 py-4">
+        <div className="space-y-1">
+          <div>Style: {product.categories?.style?.join(', ') || 'N/A'}</div>
+          <div>Type: {product.categories?.type?.join(', ') || 'N/A'}</div>
+        </div>
+      </td>
+      <td className="px-6 py-4 text-right">
+        <div className="flex justify-end space-x-2">
+          <button
+            onClick={() => handleEdit(product)}
+            className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+          >
+            Modifier
+          </button>
+          <button
+            onClick={() => handleDelete(product._id)}
+            className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+          >
+            Supprimer
+          </button>
+        </div>
+      </td>
+    </tr>
+  ))}
+</tbody>
         </table>
       </div>
 

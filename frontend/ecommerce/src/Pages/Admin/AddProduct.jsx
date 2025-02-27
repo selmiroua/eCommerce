@@ -16,6 +16,7 @@ const AddProduct = () => {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState('');
   const [isDragging, setIsDragging] = useState(false);
+  
 
   const handleDragEnter = (e) => {
     e.preventDefault();
@@ -64,6 +65,8 @@ const AddProduct = () => {
     }
   };
 
+  
+
   const removeImage = () => {
     setImage(null);
     setPreview('');
@@ -77,29 +80,28 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     try {
       const token = localStorage.getItem('token');
-      const formData = new FormData(e.target);
-      
+  
       // Validate required fields
-      if (!formData.get('name')?.trim()) {
+      if (!product.name.trim()) {
         toast.error('Le nom du produit est requis');
         return;
       }
-      if (!formData.get('description')?.trim()) {
+      if (!product.description.trim()) {
         toast.error('La description est requise');
         return;
       }
-      if (!formData.get('category')) {
+      if (!product.category) {
         toast.error('La catégorie est requise');
         return;
       }
-
+  
       // Convert price and stock to numbers
-      const price = parseFloat(formData.get('price'));
-      const stock = parseInt(formData.get('stock'), 10);
-
+      const price = parseFloat(product.price);
+      const stock = parseInt(product.stock, 10);
+  
       if (isNaN(price) || price <= 0) {
         toast.error('Le prix doit être un nombre positif');
         return;
@@ -108,24 +110,37 @@ const AddProduct = () => {
         toast.error('Le stock doit être un nombre entier positif');
         return;
       }
-
+  
+      // Convert image to base64 if it exists
+      let imageBase64 = '';
+      if (image) {
+        imageBase64 = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(image);
+        });
+      }
+  
       // Create the data object with proper number types
       const productData = {
-        name: formData.get('name').trim(),
-        description: formData.get('description').trim(),
+        name: product.name.trim(),
+        description: product.description.trim(),
         price: price,
         stock: stock,
-        category: formData.get('category'),
-        image: image || ''
+        category: product.category,
+        image: imageBase64 // Send image as base64
       };
-
+  
+      console.log('Product Data:', productData); // Debugging
+  
       const response = await axios.post('http://localhost:5000/api/products', productData, {
         headers: {
           'Content-Type': 'application/json',
           'x-auth-token': token
         }
       });
-
+  
       toast.success('Produit ajouté avec succès!');
       setTimeout(() => navigate('/admin/products'), 2000);
     } catch (error) {
