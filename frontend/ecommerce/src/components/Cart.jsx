@@ -21,7 +21,7 @@ const Cart = () => {
         {cartItems.map((item) => (
           <div key={item._id} className="flex items-center space-x-4 border-b pb-4">
             <img
-              src={item.images[0]}
+              src={item.images && item.images.length > 0 ? item.images[0] : 'https://via.placeholder.com/80'} // Fallback image
               alt={item.name}
               className="w-20 h-20 object-cover rounded"
             />
@@ -32,6 +32,7 @@ const Cart = () => {
                 <button
                   onClick={() => updateQuantity(item._id, item.quantity - 1)}
                   className="px-2 py-1 bg-gray-100 rounded"
+                  disabled={item.quantity <= 1} // Disable button if quantity is 1
                 >
                   -
                 </button>

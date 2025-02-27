@@ -5,6 +5,7 @@ const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
 
   const handleAddToCart = () => {
+    console.log('Adding to cart:', product); // Debugging line
     addToCart(product);
   };
 

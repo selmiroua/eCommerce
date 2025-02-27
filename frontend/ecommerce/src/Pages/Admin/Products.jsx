@@ -346,8 +346,7 @@ const Products = () => {
       </td>
       <td className="px-6 py-4">
         <div className="space-y-1">
-          <div>Style: {product.categories?.style?.join(', ') || 'N/A'}</div>
-          <div>Type: {product.categories?.type?.join(', ') || 'N/A'}</div>
+          <div>{product.category}</div>
         </div>
       </td>
       <td className="px-6 py-4 text-right">
@@ -438,9 +437,9 @@ const Products = () => {
                   required
                 >
                   <option value="">Sélectionner une catégorie</option>
-                  <option value="dresses">Robes</option>
-                  <option value="pants">Pantalons</option>
-                  <option value="accessories">Accessoires</option>
+                  <option value="robes">Robes</option>
+                  <option value="pantalons">Pantalons</option>
+                  <option value="accessoires">Accessoires</option>
                 </select>
               </div>
 

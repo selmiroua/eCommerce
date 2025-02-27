@@ -6,6 +6,7 @@ import AdminRoute from './components/AdminRoute';
 import Header from './components/Header';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Cart from './components/Cart';
 
 // Page imports
 import Home from './Pages/Home';
@@ -23,6 +24,7 @@ import AdminRegister from './Pages/Admin/Register';
 import AddProduct from './Pages/Admin/AddProduct';
 import Dresses from './Pages/Women/Dresses';
 import ClientDashboard from './Pages/Client/Dashboard';
+import CartPage from './Pages/Cart';
 
 function App() {
   return (
@@ -59,6 +61,7 @@ function App() {
                   <Route path="/women" element={<Women />} />
                   <Route path="/women/dresses" element={<Dresses />} />
                   <Route path="/men" element={<Men />} />
+                  <Route path="/cart" element={<CartPage />} />
 
                   {/* Admin Routes */}
                   <Route path="/admin/*" element={
