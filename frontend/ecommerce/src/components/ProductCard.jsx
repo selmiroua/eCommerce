@@ -10,7 +10,7 @@ const ProductCard = ({ product }) => {
     try {
       console.log('Adding to cart:', product); // Debugging line
       addToCart(product);
-      toast.success(`${product.name} added to cart!`, {
+      toast.success(`${product.name} est aouté au panier!`, {
         position: "top-right",
         autoClose: 1500,
         hideProgressBar: false,

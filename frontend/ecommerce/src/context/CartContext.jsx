@@ -37,6 +37,11 @@ const cartReducer = (state, action) => {
         ...state,
         cartItems: state.cartItems.filter((item) => item._id !== action.payload),
       };
+    case 'CLEAR_CART': // Add this case
+      return {
+        ...state,
+        cartItems: [], // Clear the cart items
+      };
     default:
       return state;
   }
@@ -57,6 +62,10 @@ const CartProvider = ({ children }) => {
     dispatch({ type: 'REMOVE_FROM_CART', payload: id });
   };
 
+  const clearCart = () => {
+    dispatch({ type: 'CLEAR_CART' }); // Dispatch the CLEAR_CART action
+  };
+
   const cartTotal = state.cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
@@ -70,6 +79,7 @@ const CartProvider = ({ children }) => {
         addToCart,
         updateQuantity,
         removeFromCart,
+        clearCart, // Add clearCart to the context value
       }}
     >
       {children}

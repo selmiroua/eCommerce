@@ -5,6 +5,7 @@ const cors = require('cors');
 const productRoutes = require('./routes/productRoutes');
 const authRoutes = require('./routes/authRoutes');
 const path = require('path'); // Add this at the top of your file
+const orderRoutes = require('./routes/orders'); // Add this line
 
 const app = express();
 
@@ -25,6 +26,7 @@ mongoose.connect(MONGODB_URI)
 // Routes
 app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/orders', orderRoutes); // Add this line to mount the orders route
 
 // Error handling middleware
 app.use((err, req, res, next) => {

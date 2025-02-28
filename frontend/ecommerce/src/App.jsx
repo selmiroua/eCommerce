@@ -7,6 +7,7 @@ import Header from './components/Header';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cart from './components/Cart';
+import OrderSuccess from './pages/OrderSuccess';
 
 // Page imports
 import Home from './Pages/Home';
@@ -25,7 +26,7 @@ import AddProduct from './Pages/Admin/AddProduct';
 import Dresses from './Pages/Women/Dresses';
 import ClientDashboard from './Pages/Client/Dashboard';
 import CartPage from './Pages/Cart';
-
+import Checkout from "./Pages/Checkout";
 function App() {
   return (
     <Suspense fallback={
@@ -62,6 +63,9 @@ function App() {
                   <Route path="/women/dresses" element={<Dresses />} />
                   <Route path="/men" element={<Men />} />
                   <Route path="/cart" element={<CartPage />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/order-success" element={<OrderSuccess />} />
+
 
                   {/* Admin Routes */}
                   <Route path="/admin/*" element={
