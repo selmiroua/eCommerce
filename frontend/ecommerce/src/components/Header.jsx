@@ -7,17 +7,19 @@ const Header = () => {
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [activeCategory, setActiveCategory] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkAdminStatus = async () => {
       try {
         const token = localStorage.getItem('token');
+        console.log('Token:', token); // Debug token
         if (token) {
           setIsLoggedIn(true);
           const response = await axios.get('http://localhost:5000/api/admin/check', {
-            headers: { 'x-auth-token': token }
+            headers: { Authorization: `Bearer ${token}` },
           });
+          console.log('Admin check response:', response.data); // Debug response
           setIsAdmin(response.data.isAdmin);
         } else {
           setIsLoggedIn(false);
@@ -26,6 +28,10 @@ const Header = () => {
       } catch (error) {
         console.error('Error checking admin status:', error);
         setIsAdmin(false);
+        localStorage.removeItem('token');
+        setIsLoggedIn(false);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -36,6 +42,10 @@ const Header = () => {
     e.preventDefault();
     console.log('Searching for:', searchQuery);
   };
+
+  if (loading) {
+    return <div>Loading...</div>; // Show a loading spinner or message
+  }
 
   return (
     <header className="w-full">

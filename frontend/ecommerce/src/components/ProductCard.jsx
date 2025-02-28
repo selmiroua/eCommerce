@@ -1,12 +1,33 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
 
   const handleAddToCart = () => {
-    console.log('Adding to cart:', product); // Debugging line
-    addToCart(product);
+    try {
+      console.log('Adding to cart:', product); // Debugging line
+      addToCart(product);
+      toast.success(`${product.name} added to cart!`, {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    } catch (error) {
+      toast.error(`Failed to add ${product.name} to cart.`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
   };
 
   if (!product) {
